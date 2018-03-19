@@ -28,7 +28,7 @@ var sso_key = '==========YOUR_SSO_KEY==========';
 var bs = 16; 
 // prepare json data
 var data_json = {
-    expires:Math.round(new Date().getTime()/1000.0),
+    expires:Math.round(new Date().getTime()/1000.0) + 3600,   // + one hour
     guid:'123',
     display_name:'John Doe',
     email:'john.doe@test.com',
@@ -41,7 +41,7 @@ var raw = JSON.stringify(data_json);
 var iv = generateRandomString(bs);
 // generate token    
 var aes = crypto.createCipheriv('aes-256-cbc', sso_key, iv);
-sso_token = aes.update(raw, 'utf-8', 'binary') + aes.final('binary');
+var sso_token = aes.update(raw, 'utf-8', 'binary') + aes.final('binary');
 // prepend iv and apply base64encode
 sso_token = new Buffer(iv + sso_token, 'binary').toString('base64');
 // escape characters for url
